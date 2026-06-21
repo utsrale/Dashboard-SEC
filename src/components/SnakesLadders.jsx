@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Dices, Trophy, RotateCcw, CheckCircle, XCircle, ArrowUp, ArrowDown } from "lucide-react";
 import confetti from "canvas-confetti";
