@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Dices, Trophy, RotateCcw, CheckCircle, XCircle, ArrowUp, ArrowDown } from "lucide-react";
 import confetti from "canvas-confetti";
 import { quizQuestions } from "@/data/quiz-questions";
+import { updateAchievement, updateBestTime } from "@/utils/storage";
 
 const BOARD_SIZE = 10;
 const TOTAL_CELLS = 100;
@@ -262,6 +263,8 @@ export default function SnakesLadders() {
         clearInterval(rollInterval);
         setAnimatedDice(prev => ({ ...prev, value: finalValue }));
         setDiceValue(finalValue);
+        if (finalValue === 6) updateAchievement("lucky_roller", 1);
+        if (!gameStarted) updateAchievement("first_step", 1);
         
         // Biarkan dadu di papan selama 1.2 detik lalu hilangkan
         setTimeout(() => {
@@ -293,6 +296,7 @@ export default function SnakesLadders() {
         if (currentPos === TOTAL_CELLS) {
           setGameWon(true);
           setScore(prev => prev + 50);
+          updateBestTime(elapsedTime);
           triggerConfetti();
           return;
         }
@@ -324,11 +328,14 @@ export default function SnakesLadders() {
         targetPos = quizModal.targetPos;
         setScore(prev => prev + 10);
         setCorrectAnswers(prev => prev + 1);
+        updateAchievement("data_explorer", 1);
       }
     } else if (quizModal.type === "snake") {
       if (isCorrect) {
         setScore(prev => prev + 10);
         setCorrectAnswers(prev => prev + 1);
+        updateAchievement("data_explorer", 1);
+        updateAchievement("snake_charmer", 1);
       } else {
         targetPos = quizModal.targetPos;
       }

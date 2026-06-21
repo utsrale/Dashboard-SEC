@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Trophy, Lock, Clock, Medal, User } from "lucide-react";
 import Image from "next/image";
+import { getProgress } from "@/utils/storage";
 
 const ACHIEVEMENTS_DATA = [
   {
@@ -44,18 +45,19 @@ const ACHIEVEMENTS_DATA = [
 
 export default function AchievementsPage() {
   const [progressData, setProgressData] = useState({});
+  const [bestTimeStr, setBestTimeStr] = useState("--:--");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Simulasi pengambilan data progress lokal
-    const mockProgress = {
-      first_step: 1,
-      data_explorer: 10,
-      snake_charmer: 5,
-      lucky_roller: 1,
-    };
+    const data = getProgress();
+    setProgressData(data.achievements || {});
     
-    setProgressData(mockProgress);
+    if (data.bestTime !== null) {
+      const m = Math.floor(data.bestTime / 60).toString().padStart(2, '0');
+      const s = (data.bestTime % 60).toString().padStart(2, '0');
+      setBestTimeStr(`${m}:${s}`);
+    }
+    
     setMounted(true);
   }, []);
 
@@ -96,7 +98,7 @@ export default function AchievementsPage() {
                 Rekor Terbaik
               </div>
               <div className="text-3xl font-black text-indigo-300 mt-1">
-                03:45<span className="text-sm font-medium text-slate-400 ml-1">mnt</span>
+                {bestTimeStr}<span className="text-sm font-medium text-slate-400 ml-1">mnt</span>
               </div>
             </div>
 
