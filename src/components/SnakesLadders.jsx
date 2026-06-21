@@ -593,23 +593,6 @@ export default function SnakesLadders() {
             </div>
           </div>
         </div>
-
-        {/* Legend */}
-        <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 text-xs">
-          <h3 className="font-bold text-gray-400 mb-3 uppercase tracking-wider">Legenda</h3>
-          <div className="space-y-2 text-gray-500">
-            {Object.entries(ladders).map(([from, to]) => (
-              <div key={`leg-${from}`} className="flex justify-between items-center border-b border-gray-50 pb-1">
-                <span className="flex items-center gap-1.5"><ArrowUp size={12} className="text-emerald-500" /> {from} → {to}</span>
-              </div>
-            ))}
-            {Object.entries(snakes).map(([from, to]) => (
-              <div key={`leg-${from}`} className="flex justify-between items-center border-b border-gray-50 pb-1 text-red-400">
-                <span className="flex items-center gap-1.5"><ArrowDown size={12} className="text-red-400" /> {from} → {to}</span>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Quiz Modal */}
