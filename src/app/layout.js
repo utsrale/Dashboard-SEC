@@ -6,12 +6,9 @@ const outfit = Outfit({
   subsets: ["latin"],
 });
 
-import Sidebar from "@/components/Sidebar";
-import Topbar from "@/components/Topbar";
-
 export const metadata = {
-  title: "Datavention - Petualangan Ular Tangga & Data",
-  description: "Web Interaktif Kluster MFA dan Ular Tangga Edukatif",
+  title: "BEKAL - Board game, Edukasi, dan Klustering sisa pAngan Lokal",
+  description: "Web Interaktif Klustering Pangan dan Game Edukasi Ular Tangga",
 };
 
 export default function RootLayout({ children }) {
@@ -20,14 +17,8 @@ export default function RootLayout({ children }) {
       lang="id"
       className={`${outfit.variable} h-full antialiased`}
     >
-      <body suppressHydrationWarning className="min-h-full flex bg-[#F8F9FA] text-[#1E293B] font-sans">
-        <Sidebar />
-        <div className="flex-1 flex flex-col min-h-screen">
-          <Topbar />
-          <main className="flex-1 p-8 overflow-x-hidden overflow-y-auto">
-            {children}
-          </main>
-        </div>
+      <body suppressHydrationWarning className="min-h-screen bg-[#F8F9FA] text-[#1E293B] font-sans flex flex-col">
+        {children}
       </body>
     </html>
   );

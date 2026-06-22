@@ -6,7 +6,7 @@ export default function Topbar() {
     <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-8 sticky top-0 z-10 shadow-[0_4px_24px_rgba(0,0,0,0.02)]">
       {/* Branding / Title */}
       <div className="flex items-center gap-2">
-        <h1 className="text-2xl font-black text-indigo-600 tracking-tight">Datavention</h1>
+        <h1 className="text-2xl font-black text-indigo-600 tracking-tight">BEKAL</h1>
       </div>
 
 
