@@ -628,7 +628,7 @@ export default function SnakesLadders() {
           <ul className="text-gray-500 text-sm space-y-2 leading-relaxed font-medium">
             <li className="flex gap-2"><span className="text-emerald-500 font-bold">🪜</span> Tangga: Jawab benar = naik!</li>
             <li className="flex gap-2"><span className="text-red-500 font-bold">🐍</span> Ular: Jawab salah = turun!</li>
-            <li className="flex gap-2"><span className="text-amber-500 font-bold">🏆</span> Peringkat (Opsi B): Main sampai semua finish!</li>
+            <li className="flex gap-2"><span className="text-amber-500 font-bold">🏆</span> Peringkat: Main sampai semua finish!</li>
             <li className="flex gap-2"><span className="text-indigo-500 font-bold">⭐</span> Dadu 6: Dapat bonus kocokan lagi (maks 3x).</li>
           </ul>
         </div>
