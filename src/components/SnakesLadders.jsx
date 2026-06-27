@@ -566,8 +566,8 @@ export default function SnakesLadders() {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-2">Jumlah Pemain</label>
-            <div className="grid grid-cols-3 gap-3">
-              {[2, 3, 4].map(n => (
+            <div className="grid grid-cols-4 gap-3">
+              {[1, 2, 3, 4].map(n => (
                 <button
                   key={n}
                   onClick={() => setNumPlayers(n)}
