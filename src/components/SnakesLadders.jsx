@@ -116,47 +116,79 @@ const Snake = ({ start, end, color }) => {
   );
 };
 
-const Pawn = () => (
-  <svg viewBox="0 0 100 120" className="w-full h-full overflow-visible filter drop-shadow-md">
-    <defs>
-      <radialGradient id="pawnGlow" cx="40%" cy="30%" r="60%">
-        <stop offset="0%" stopColor="#a5b4fc" />
-        <stop offset="30%" stopColor="#6366f1" />
-        <stop offset="100%" stopColor="#312e81" />
-      </radialGradient>
-      <linearGradient id="pawnShine" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="rgba(255,255,255,0.8)" />
-        <stop offset="50%" stopColor="rgba(255,255,255,0)" />
-      </linearGradient>
-    </defs>
-    
-    {/* Base shadow */}
-    <ellipse cx="50" cy="112" rx="35" ry="10" fill="rgba(0,0,0,0.4)" filter="blur(2px)" />
-    
-    {/* Base */}
-    <path d="M 25 105 C 25 95, 35 90, 42 85 L 58 85 C 65 90, 75 95, 75 105 C 75 112, 63 115, 50 115 C 37 115, 25 112, 25 105 Z" fill="url(#pawnGlow)" stroke="#1e1b4b" strokeWidth="1.5" />
-    <path d="M 25 105 C 25 95, 35 90, 42 85 L 58 85 C 65 90, 75 95, 75 105 C 75 112, 63 115, 50 115 C 37 115, 25 112, 25 105 Z" fill="url(#pawnShine)" />
-    
-    {/* Ring */}
-    <ellipse cx="50" cy="85" rx="18" ry="5" fill="url(#pawnGlow)" stroke="#1e1b4b" strokeWidth="1.5" />
-    <ellipse cx="50" cy="85" rx="18" ry="5" fill="url(#pawnShine)" />
+const PAWN_COLORS = [
+  { id: "p1", start: "#a5b4fc", mid: "#6366f1", end: "#312e81" }, // Indigo
+  { id: "p2", start: "#a7f3d0", mid: "#10b981", end: "#064e3b" }, // Emerald
+  { id: "p3", start: "#fed7aa", mid: "#f97316", end: "#7c2d12" }, // Orange
+  { id: "p4", start: "#fecdd3", mid: "#f43f5e", end: "#881337" }, // Rose
+];
 
-    {/* Neck/Stem */}
-    <path d="M 40 85 L 43 45 L 57 45 L 60 85 Z" fill="url(#pawnGlow)" stroke="#1e1b4b" strokeWidth="1.5" />
-    <path d="M 40 85 L 43 45 L 57 45 L 60 85 Z" fill="url(#pawnShine)" />
+const Pawn = ({ index = 0 }) => {
+  const scheme = PAWN_COLORS[index % PAWN_COLORS.length];
+  const glowId = `pawnGlow-${scheme.id}`;
+  const shineId = `pawnShine-${scheme.id}`;
 
-    {/* Collar Ring */}
-    <ellipse cx="50" cy="45" rx="15" ry="4" fill="url(#pawnGlow)" stroke="#1e1b4b" strokeWidth="1.5" />
-    <ellipse cx="50" cy="45" rx="15" ry="4" fill="url(#pawnShine)" />
+  return (
+    <svg viewBox="0 0 100 120" className="w-full h-full overflow-visible filter drop-shadow-md">
+      <defs>
+        <radialGradient id={glowId} cx="40%" cy="30%" r="60%">
+          <stop offset="0%" stopColor={scheme.start} />
+          <stop offset="30%" stopColor={scheme.mid} />
+          <stop offset="100%" stopColor={scheme.end} />
+        </radialGradient>
+        <linearGradient id={shineId} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="rgba(255,255,255,0.8)" />
+          <stop offset="50%" stopColor="rgba(255,255,255,0)" />
+        </linearGradient>
+      </defs>
+      
+      {/* Base shadow */}
+      <ellipse cx="50" cy="112" rx="35" ry="10" fill="rgba(0,0,0,0.4)" filter="blur(2px)" />
+      
+      {/* Base */}
+      <path d="M 25 105 C 25 95, 35 90, 42 85 L 58 85 C 65 90, 75 95, 75 105 C 75 112, 63 115, 50 115 C 37 115, 25 112, 25 105 Z" fill={`url(#${glowId})`} stroke="#1e1b4b" strokeWidth="1.5" />
+      <path d="M 25 105 C 25 95, 35 90, 42 85 L 58 85 C 65 90, 75 95, 75 105 C 75 112, 63 115, 50 115 C 37 115, 25 112, 25 105 Z" fill={`url(#${shineId})`} />
+      
+      {/* Ring */}
+      <ellipse cx="50" cy="85" rx="18" ry="5" fill={`url(#${glowId})`} stroke="#1e1b4b" strokeWidth="1.5" />
+      <ellipse cx="50" cy="85" rx="18" ry="5" fill={`url(#${shineId})`} />
 
-    {/* Head */}
-    <circle cx="50" cy="25" r="18" fill="url(#pawnGlow)" stroke="#1e1b4b" strokeWidth="1.5" />
-    <circle cx="50" cy="25" r="18" fill="url(#pawnShine)" />
-    
-    {/* Highlight on head */}
-    <ellipse cx="43" cy="16" rx="6" ry="3" fill="rgba(255,255,255,0.7)" transform="rotate(-30 43 16)" />
-  </svg>
-);
+      {/* Neck/Stem */}
+      <path d="M 40 85 L 43 45 L 57 45 L 60 85 Z" fill={`url(#${glowId})`} stroke="#1e1b4b" strokeWidth="1.5" />
+      <path d="M 40 85 L 43 45 L 57 45 L 60 85 Z" fill={`url(#${shineId})`} />
+
+      {/* Collar Ring */}
+      <ellipse cx="50" cy="45" rx="15" ry="4" fill={`url(#${glowId})`} stroke="#1e1b4b" strokeWidth="1.5" />
+      <ellipse cx="50" cy="45" rx="15" ry="4" fill={`url(#${shineId})`} />
+
+      {/* Head */}
+      <circle cx="50" cy="25" r="18" fill={`url(#${glowId})`} stroke="#1e1b4b" strokeWidth="1.5" />
+      <circle cx="50" cy="25" r="18" fill={`url(#${shineId})`} />
+      
+      {/* Highlight on head */}
+      <ellipse cx="43" cy="16" rx="6" ry="3" fill="rgba(255,255,255,0.7)" transform="rotate(-30 43 16)" />
+    </svg>
+  );
+};
+
+const getPlayerOffset = (playerIdx, playersList) => {
+  if (playersList.length === 0) return { xOffset: 0, yOffset: 0 };
+  const currentPos = playersList[playerIdx].position;
+  const playersOnSameCell = playersList
+    .map((p, idx) => ({ idx, position: p.position }))
+    .filter(p => p.position === currentPos);
+
+  const totalOnCell = playersOnSameCell.length;
+  if (totalOnCell <= 1) return { xOffset: 0, yOffset: 0 };
+
+  const relativeIdx = playersOnSameCell.findIndex(p => p.idx === playerIdx);
+  const angle = (relativeIdx / totalOnCell) * 2 * Math.PI - Math.PI / 4;
+  const radius = 2.0; 
+  return {
+    xOffset: Math.cos(angle) * radius,
+    yOffset: Math.sin(angle) * radius
+  };
+};
 
 const generateBoard = () => {
   const board = [];
@@ -178,12 +210,18 @@ const generateBoard = () => {
 
 export default function SnakesLadders() {
   const board = useMemo(() => generateBoard(), []);
-  const [position, setPosition] = useState(1);
+  
+  // Setup & Multiplayer States
+  const [setupMode, setSetupMode] = useState(true);
+  const [numPlayers, setNumPlayers] = useState(2);
+  const [playerNames, setPlayerNames] = useState(["Pemain 1", "Pemain 2", "Pemain 3", "Pemain 4"]);
+  const [players, setPlayers] = useState([]);
+  const [currentPlayerIdx, setCurrentPlayerIdx] = useState(0);
+  const [finishRankList, setFinishRankList] = useState([]);
+  const [bonusRollActive, setBonusRollActive] = useState(false);
+
   const [diceValue, setDiceValue] = useState(null);
   const [isRolling, setIsRolling] = useState(false);
-  const [score, setScore] = useState(0);
-  const [questionsAnswered, setQuestionsAnswered] = useState(0);
-  const [correctAnswers, setCorrectAnswers] = useState(0);
   const [gameWon, setGameWon] = useState(false);
   const [usedQuestions, setUsedQuestions] = useState([]);
   
@@ -192,29 +230,30 @@ export default function SnakesLadders() {
 
   useEffect(() => {
     let timer;
-    if (gameStarted && !gameWon) {
+    if (gameStarted && !gameWon && !setupMode) {
       timer = setInterval(() => {
         setElapsedTime(prev => prev + 1);
       }, 1000);
     }
     return () => clearInterval(timer);
-  }, [gameStarted, gameWon]);
+  }, [gameStarted, gameWon, setupMode]);
 
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60).toString().padStart(2, '0');
     const s = (seconds % 60).toString().padStart(2, '0');
     return `${m}:${s}`;
   };
+
   const [animatedDice, setAnimatedDice] = useState({
     visible: false, value: 1, startLeft: "0%", startTop: "0%", endLeft: "50%", endTop: "50%", rot: 0 
   });
 
   const [quizModal, setQuizModal] = useState({
-    isOpen: false, type: null, targetPos: null, question: null,
+    isOpen: false, type: null, targetPos: null, question: null, hasBonus: false
   });
 
   const [feedbackModal, setFeedbackModal] = useState({
-    isOpen: false, isCorrect: false, explanation: "", type: null, targetPos: null,
+    isOpen: false, isCorrect: false, explanation: "", type: null, targetPos: null, hasBonus: false
   });
 
   const getRandomQuestion = useCallback(() => {
@@ -236,21 +275,42 @@ export default function SnakesLadders() {
     }, 200);
   };
 
+  const handleStartGame = () => {
+    const initialPlayers = [];
+    for (let i = 0; i < numPlayers; i++) {
+      initialPlayers.push({
+        id: i,
+        name: playerNames[i] || `Pemain ${i + 1}`,
+        position: 1,
+        score: 0,
+        correctAnswers: 0,
+        questionsAnswered: 0,
+        isFinished: false,
+        finishedRank: 0,
+        consecutiveSixes: 0,
+        elapsedTime: 0
+      });
+    }
+    setPlayers(initialPlayers);
+    setCurrentPlayerIdx(0);
+    setElapsedTime(0);
+    setFinishRankList([]);
+    setBonusRollActive(false);
+    setSetupMode(false);
+    setGameStarted(true);
+    setGameWon(false);
+  };
+
   const handleRollDice = () => {
-    if (isRolling || quizModal.isOpen || feedbackModal.isOpen || gameWon) return;
+    if (isRolling || quizModal.isOpen || feedbackModal.isOpen || gameWon || setupMode) return;
     
-    if (!gameStarted) setGameStarted(true);
     setIsRolling(true);
-    
     const finalValue = Math.floor(Math.random() * 6) + 1;
     
-    // Lemparkan dari bawah (kiri atau kanan acak)
     const startLeft = Math.random() > 0.5 ? "120%" : "-20%";
     const startTop = "120%"; 
-    // Jatuh secara acak di area tengah papan
     const endLeft = `${30 + Math.random() * 40}%`; 
     const endTop = `${30 + Math.random() * 40}%`; 
-    // Putaran rotasi acak yang sangat banyak
     const rot = (Math.random() > 0.5 ? 1 : -1) * (720 + Math.random() * 360);
 
     setAnimatedDice({ visible: true, value: 1, startLeft, startTop, endLeft, endTop, rot });
@@ -259,45 +319,81 @@ export default function SnakesLadders() {
     const rollInterval = setInterval(() => {
       setAnimatedDice(prev => ({ ...prev, value: Math.floor(Math.random() * 6) + 1 }));
       rolls++;
-      if (rolls > 12) { // 1 detik lemparan
+      if (rolls > 12) {
         clearInterval(rollInterval);
         setAnimatedDice(prev => ({ ...prev, value: finalValue }));
         setDiceValue(finalValue);
-        if (finalValue === 6) updateAchievement("lucky_roller", 1);
-        if (!gameStarted) updateAchievement("first_step", 1);
         
-        // Biarkan dadu di papan selama 1.2 detik lalu hilangkan
+        let hasBonus = false;
+        const currentP = players[currentPlayerIdx];
+        
+        if (finalValue === 6) {
+          updateAchievement("lucky_roller", 1);
+          const nextSixes = currentP.consecutiveSixes + 1;
+          if (nextSixes < 3) {
+            hasBonus = true;
+            setBonusRollActive(true);
+            setPlayers(prev => prev.map((p, idx) => idx === currentPlayerIdx ? { ...p, consecutiveSixes: nextSixes } : p));
+          } else {
+            hasBonus = false;
+            setBonusRollActive(false);
+            setPlayers(prev => prev.map((p, idx) => idx === currentPlayerIdx ? { ...p, consecutiveSixes: 0 } : p));
+          }
+        } else {
+          setBonusRollActive(false);
+          setPlayers(prev => prev.map((p, idx) => idx === currentPlayerIdx ? { ...p, consecutiveSixes: 0 } : p));
+        }
+
+        updateAchievement("first_step", 1);
+        
         setTimeout(() => {
           setAnimatedDice(prev => ({ ...prev, visible: false }));
-          // Setelah dadu menghilang perlahan, baru jalankan pion
           setTimeout(() => {
-            movePlayer(finalValue);
+            movePlayer(currentPlayerIdx, finalValue, hasBonus);
           }, 400); 
         }, 1200);
       }
     }, 80);
   };
 
-  const movePlayer = (steps) => {
-    let currentPos = position;
-    let targetPos = position + steps;
+  const movePlayer = (playerIdx, steps, hasBonus) => {
+    const currentP = players[playerIdx];
+    let currentPos = currentP.position;
+    let targetPos = currentP.position + steps;
     if (targetPos > TOTAL_CELLS) targetPos = TOTAL_CELLS;
     
-    // Pindahkan pion satu per satu setiap 300ms
     const stepInterval = setInterval(() => {
       currentPos++;
-      setPosition(currentPos);
+      setPlayers(prev => prev.map((p, idx) => idx === playerIdx ? { ...p, position: currentPos } : p));
       
       if (currentPos >= targetPos) {
         clearInterval(stepInterval);
-        setIsRolling(false);
 
-        // Setelah selesai melangkah, cek menang / ular / tangga
         if (currentPos === TOTAL_CELLS) {
-          setGameWon(true);
-          setScore(prev => prev + 50);
-          updateBestTime(elapsedTime);
-          triggerConfetti();
+          const nextRank = finishRankList.length + 1;
+          const updatedFinishList = [...finishRankList, playerIdx];
+          setFinishRankList(updatedFinishList);
+          
+          setPlayers(prev => prev.map((p, idx) => idx === playerIdx ? {
+            ...p,
+            isFinished: true,
+            finishedRank: nextRank,
+            elapsedTime: elapsedTime,
+            score: p.score + 50
+          } : p));
+
+          if (nextRank === 1) {
+            triggerConfetti();
+            updateBestTime(elapsedTime);
+          }
+
+          const allFinished = updatedFinishList.length === numPlayers;
+          if (allFinished) {
+            setGameWon(true);
+            setIsRolling(false);
+          } else {
+            advanceTurn(false);
+          }
           return;
         }
 
@@ -305,14 +401,16 @@ export default function SnakesLadders() {
           const q = getRandomQuestion();
           setUsedQuestions(prev => [...prev, q.id]);
           setTimeout(() => {
-            setQuizModal({ isOpen: true, type: "ladder", targetPos: ladders[currentPos], question: q });
+            setQuizModal({ isOpen: true, type: "ladder", targetPos: ladders[currentPos], question: q, hasBonus });
           }, 400);
         } else if (snakes[currentPos]) {
           const q = getRandomQuestion();
           setUsedQuestions(prev => [...prev, q.id]);
           setTimeout(() => {
-            setQuizModal({ isOpen: true, type: "snake", targetPos: snakes[currentPos], question: q });
+            setQuizModal({ isOpen: true, type: "snake", targetPos: snakes[currentPos], question: q, hasBonus });
           }, 400);
+        } else {
+          advanceTurn(hasBonus);
         }
       }
     }, 300);
@@ -320,56 +418,116 @@ export default function SnakesLadders() {
 
   const handleAnswer = (selectedIdx) => {
     const isCorrect = selectedIdx === quizModal.question.correctAnswer;
-    setQuestionsAnswered(prev => prev + 1);
+    
+    setPlayers(prev => prev.map((p, idx) => idx === currentPlayerIdx ? {
+      ...p,
+      questionsAnswered: p.questionsAnswered + 1,
+      correctAnswers: p.correctAnswers + (isCorrect ? 1 : 0),
+      score: p.score + (isCorrect ? 10 : 0)
+    } : p));
 
-    let targetPos = null;
-    if (quizModal.type === "ladder") {
-      if (isCorrect) {
-        targetPos = quizModal.targetPos;
-        setScore(prev => prev + 10);
-        setCorrectAnswers(prev => prev + 1);
-        updateAchievement("data_explorer", 1);
-      }
-    } else if (quizModal.type === "snake") {
-      if (isCorrect) {
-        setScore(prev => prev + 10);
-        setCorrectAnswers(prev => prev + 1);
-        updateAchievement("data_explorer", 1);
+    if (isCorrect) {
+      updateAchievement("data_explorer", 1);
+      if (quizModal.type === "snake") {
         updateAchievement("snake_charmer", 1);
-      } else {
-        targetPos = quizModal.targetPos;
       }
     }
 
-    setQuizModal({ isOpen: false, type: null, targetPos: null, question: null });
+    let targetPos = null;
+    if (quizModal.type === "ladder" && isCorrect) {
+      targetPos = quizModal.targetPos;
+    } else if (quizModal.type === "snake" && !isCorrect) {
+      targetPos = quizModal.targetPos;
+    }
+
+    setQuizModal(prev => ({ ...prev, isOpen: false }));
     setFeedbackModal({
       isOpen: true,
       isCorrect,
       explanation: quizModal.question.explanation,
       type: quizModal.type,
       targetPos,
+      hasBonus: quizModal.hasBonus
     });
   };
 
   const closeFeedback = () => {
-    if (feedbackModal.targetPos !== null) {
-      setPosition(feedbackModal.targetPos);
+    const targetPos = feedbackModal.targetPos;
+    const hasBonus = feedbackModal.hasBonus;
+
+    setFeedbackModal({ isOpen: false, isCorrect: false, explanation: "", type: null, targetPos: null, hasBonus: false });
+
+    if (targetPos !== null) {
+      setPlayers(prev => prev.map((p, idx) => idx === currentPlayerIdx ? { ...p, position: targetPos } : p));
+      
+      if (targetPos === TOTAL_CELLS) {
+        const nextRank = finishRankList.length + 1;
+        const updatedFinishList = [...finishRankList, currentPlayerIdx];
+        setFinishRankList(updatedFinishList);
+        
+        setPlayers(prev => prev.map((p, idx) => idx === currentPlayerIdx ? {
+          ...p,
+          isFinished: true,
+          finishedRank: nextRank,
+          elapsedTime: elapsedTime,
+          score: p.score + 50
+        } : p));
+
+        if (nextRank === 1) {
+          triggerConfetti();
+          updateBestTime(elapsedTime);
+        }
+
+        const allFinished = updatedFinishList.length === numPlayers;
+        if (allFinished) {
+          setGameWon(true);
+          setIsRolling(false);
+        } else {
+          advanceTurn(false);
+        }
+        return;
+      }
     }
-    setFeedbackModal({ isOpen: false, isCorrect: false, explanation: "", type: null, targetPos: null });
+    advanceTurn(hasBonus);
+  };
+
+  const advanceTurn = (hasBonus) => {
+    setIsRolling(false);
+    
+    const updatedPlayers = players; 
+    const allFinished = updatedPlayers.every(p => p.isFinished);
+    if (allFinished) {
+      setGameWon(true);
+      return;
+    }
+
+    if (hasBonus) {
+      // Giliran tetap sama
+      return;
+    }
+
+    // Cari pemain berikutnya yang belum selesai
+    let nextIdx = currentPlayerIdx;
+    for (let i = 1; i <= numPlayers; i++) {
+      const checkIdx = (currentPlayerIdx + i) % numPlayers;
+      if (!players[checkIdx].isFinished) {
+        nextIdx = checkIdx;
+        break;
+      }
+    }
+    setCurrentPlayerIdx(nextIdx);
   };
 
   const resetGame = () => {
+    setSetupMode(true);
     setElapsedTime(0);
     setGameStarted(false);
-    setPosition(1);
-    setDiceValue(null);
-    setScore(0);
-    setQuestionsAnswered(0);
-    setCorrectAnswers(0);
     setGameWon(false);
     setUsedQuestions([]);
-    setQuizModal({ isOpen: false, type: null, targetPos: null, question: null });
-    setFeedbackModal({ isOpen: false, isCorrect: false, explanation: "", type: null, targetPos: null });
+    setFinishRankList([]);
+    setBonusRollActive(false);
+    setQuizModal({ isOpen: false, type: null, targetPos: null, question: null, hasBonus: false });
+    setFeedbackModal({ isOpen: false, isCorrect: false, explanation: "", type: null, targetPos: null, hasBonus: false });
   };
 
   const getCellColor = (num) => {
@@ -387,7 +545,6 @@ export default function SnakesLadders() {
     return null;
   };
 
-  // Dice face dots
   const diceDots = {
     1: [[1,1]],
     2: [[0,2],[2,0]],
@@ -397,6 +554,70 @@ export default function SnakesLadders() {
     6: [[0,0],[0,2],[1,0],[1,2],[2,0],[2,2]],
   };
 
+  // 1. SETUP MODE SCREEN
+  if (setupMode) {
+    return (
+      <div className="w-full max-w-2xl mx-auto bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-6">
+        <div className="text-center space-y-2">
+          <h2 className="text-3xl font-black text-indigo-700 tracking-tight">Setup Multipemain BEKAL 🎲</h2>
+          <p className="text-gray-400 text-sm font-medium">Pilih jumlah pemain dan masukkan nama untuk memulai petualangan ular tangga data.</p>
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Jumlah Pemain</label>
+            <div className="grid grid-cols-3 gap-3">
+              {[2, 3, 4].map(n => (
+                <button
+                  key={n}
+                  onClick={() => setNumPlayers(n)}
+                  className={`py-3 rounded-xl border-2 font-bold transition-all text-sm ${
+                    numPlayers === n 
+                      ? "border-indigo-500 bg-indigo-50 text-indigo-700 shadow-md shadow-indigo-50" 
+                      : "border-gray-100 hover:border-indigo-200 text-gray-500 bg-white"
+                  }`}
+                >
+                  {n} Pemain
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <label className="block text-sm font-bold text-gray-700">Nama Pemain</label>
+            {Array.from({ length: numPlayers }).map((_, idx) => (
+              <div key={idx} className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-100">
+                <div className="w-8 h-8 shrink-0 rounded-full flex items-center justify-center font-bold text-white shadow-sm" style={{ backgroundColor: PAWN_COLORS[idx].mid }}>
+                  {idx + 1}
+                </div>
+                <input
+                  type="text"
+                  value={playerNames[idx] || ""}
+                  placeholder={`Nama Pemain ${idx + 1}`}
+                  onChange={(e) => {
+                    const nextNames = [...playerNames];
+                    nextNames[idx] = e.target.value;
+                    setPlayerNames(nextNames);
+                  }}
+                  className="flex-1 bg-transparent font-bold text-gray-700 outline-none text-sm"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <button
+          onClick={handleStartGame}
+          className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-4 rounded-2xl font-black text-lg shadow-lg shadow-indigo-150 transition-all hover:-translate-y-0.5 active:translate-y-0"
+        >
+          Mulai Permainan
+        </button>
+      </div>
+    );
+  }
+
+  const activePlayer = players[currentPlayerIdx] || {};
+
   return (
     <div className="flex flex-col xl:flex-row gap-6 w-full justify-between items-start">
       {/* Left Panel */}
@@ -404,10 +625,11 @@ export default function SnakesLadders() {
         {/* Game Info */}
         <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
           <h3 className="text-lg font-bold text-indigo-700 mb-3">🎲 Cara Bermain</h3>
-          <ul className="text-gray-500 text-sm space-y-2 leading-relaxed">
+          <ul className="text-gray-500 text-sm space-y-2 leading-relaxed font-medium">
             <li className="flex gap-2"><span className="text-emerald-500 font-bold">🪜</span> Tangga: Jawab benar = naik!</li>
             <li className="flex gap-2"><span className="text-red-500 font-bold">🐍</span> Ular: Jawab salah = turun!</li>
-            <li className="flex gap-2"><span className="text-amber-500 font-bold">🏆</span> Tujuan: Sampai petak 100!</li>
+            <li className="flex gap-2"><span className="text-amber-500 font-bold">🏆</span> Peringkat (Opsi B): Main sampai semua finish!</li>
+            <li className="flex gap-2"><span className="text-indigo-500 font-bold">⭐</span> Dadu 6: Dapat bonus kocokan lagi (maks 3x).</li>
           </ul>
         </div>
       </div>
@@ -418,7 +640,12 @@ export default function SnakesLadders() {
         <div className="w-full bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-wrap justify-between items-center gap-4">
           <div>
             <h2 className="text-2xl font-black text-indigo-700 tracking-tight">Ular Tangga Data 🐍🪜</h2>
-            <p className="text-gray-400 text-sm font-medium mt-0.5">Jawab quiz seputar Food Loss & Waste!</p>
+            <div className="flex items-center gap-2 mt-1.5">
+              <span className="text-xs font-bold text-gray-400">Giliran saat ini:</span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black text-white shadow-sm" style={{ backgroundColor: PAWN_COLORS[currentPlayerIdx]?.mid }}>
+                {activePlayer.name} {bonusRollActive && "⭐ (Bonus)"}
+              </span>
+            </div>
           </div>
           <div className="flex items-center gap-3">
             {/* Dice */}
@@ -458,11 +685,10 @@ export default function SnakesLadders() {
             <div className="grid grid-cols-10 grid-rows-10 gap-0 relative w-full h-full border-l border-t border-gray-200 rounded-xl overflow-hidden">
               {board.map((row) => (
                 row.map((cellNum) => {
-                  const isCurrent = position === cellNum;
                   return (
                     <div 
                       key={cellNum}
-                      className={`flex flex-col items-center justify-center text-[10px] md:text-xs border-r border-b border-gray-200 transition-all duration-300 relative font-bold ${getCellColor(cellNum)} ${isCurrent ? 'ring-2 ring-indigo-400 ring-offset-2 scale-110 rounded-lg shadow-xl z-10' : ''}`}
+                      className={`flex flex-col items-center justify-center text-[10px] md:text-xs border-r border-b border-gray-200 transition-all duration-300 relative font-bold ${getCellColor(cellNum)}`}
                     >
                       <span>{cellNum}</span>
                       {getCellIcon(cellNum)}
@@ -483,25 +709,30 @@ export default function SnakesLadders() {
               {Object.entries(snakes).map(([from, to], idx) => {
                 const start = getCellCenter(Number(from));
                 const end = getCellCenter(Number(to));
-                // Offset index so snakes start with different colors than ladders
                 const color = PALETTE[(idx + 4) % PALETTE.length]; 
                 return <Snake key={`snake-${from}`} start={start} end={end} color={color} />;
               })}
             </svg>
 
-            {/* Player Token (Rendered absolutely on top of everything) */}
-            <motion.div
-              className="absolute z-40 w-8 h-10 md:w-10 md:h-12 pointer-events-none"
-              animate={{
-                left: `${getCellCenter(position).x}%`,
-                top: `${getCellCenter(position).y}%`,
-                x: "-50%",
-                y: "-75%"
-              }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            >
-              <Pawn />
-            </motion.div>
+            {/* Multiple Player Tokens */}
+            {players.map((p, idx) => {
+              const offset = getPlayerOffset(idx, players);
+              return (
+                <motion.div
+                  key={p.id}
+                  className="absolute z-40 w-7 h-9 md:w-8 md:h-10 pointer-events-none"
+                  animate={{
+                    left: `${getCellCenter(p.position).x + offset.xOffset}%`,
+                    top: `${getCellCenter(p.position).y + offset.yOffset}%`,
+                    x: "-50%",
+                    y: "-75%"
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                >
+                  <Pawn index={idx} />
+                </motion.div>
+              );
+            })}
 
             {/* Animated Thrown Dice overlay */}
             <AnimatePresence>
@@ -518,7 +749,7 @@ export default function SnakesLadders() {
                     left: animatedDice.endLeft, 
                     top: animatedDice.endTop, 
                     rotate: animatedDice.rot,
-                    scale: [0.3, 1.8, 0.8, 1.2, 1] // Animasi memantul (bounce)
+                    scale: [0.3, 1.8, 0.8, 1.2, 1]
                   }}
                   exit={{ opacity: 0, scale: 0.5 }}
                   transition={{ 
@@ -540,17 +771,37 @@ export default function SnakesLadders() {
           </div>
         </div>
 
-        {/* Win Banner */}
+        {/* Win Banner / Leaderboard Summary */}
         <AnimatePresence>
           {gameWon && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-r from-amber-50 to-emerald-50 p-6 rounded-2xl border-2 border-amber-200 text-center w-full max-w-[75vh]"
+              className="bg-gradient-to-r from-amber-50 to-emerald-50 p-6 rounded-2xl border-2 border-amber-200 text-center w-full max-w-[75vh] space-y-4"
             >
-              <h3 className="text-2xl font-black text-amber-700">🎉 Selamat, Kamu Menang!</h3>
-              <p className="text-amber-600 mt-2 font-medium">Skor akhir: <span className="font-black text-xl">{score} poin</span> — Jawaban benar: {correctAnswers}/{questionsAnswered}</p>
-              <button onClick={resetGame} className="mt-4 bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-bold transition-all">
+              <h3 className="text-2xl font-black text-amber-700">🏆 Papan Peringkat Akhir BEKAL</h3>
+              
+              <div className="space-y-2 text-left max-w-md mx-auto">
+                {players
+                  .slice()
+                  .sort((a, b) => (a.finishedRank || 99) - (b.finishedRank || 99))
+                  .map((p, idx) => (
+                    <div key={p.id} className="flex justify-between items-center bg-white/70 backdrop-blur-md p-3.5 rounded-xl border border-amber-100">
+                      <div className="flex items-center gap-3">
+                        <div className="w-7 h-7 rounded-full flex items-center justify-center font-black text-white text-xs shadow-sm" style={{ backgroundColor: PAWN_COLORS[p.id].mid }}>
+                          {idx + 1}
+                        </div>
+                        <span className="font-extrabold text-slate-700 text-sm">{p.name}</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="block text-xs font-black text-indigo-600">{p.score} poin</span>
+                        <span className="block text-[10px] text-gray-400 font-bold">Waktu: {formatTime(p.elapsedTime)}</span>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+
+              <button onClick={resetGame} className="bg-indigo-500 hover:bg-indigo-600 text-white px-8 py-3 rounded-xl font-black shadow-lg shadow-indigo-150 transition-all hover:-translate-y-0.5 active:translate-y-0 text-sm">
                 Main Lagi
               </button>
             </motion.div>
@@ -560,37 +811,60 @@ export default function SnakesLadders() {
 
       {/* Right Panel */}
       <div className="w-full xl:w-[260px] 2xl:w-[300px] shrink-0 space-y-4 order-3">
-        {/* Score */}
-        <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-          <h3 className="text-lg font-bold text-indigo-700 mb-3 flex items-center gap-2">
+        {/* Scoreboard for all players */}
+        <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+          <h3 className="text-lg font-bold text-indigo-700 flex items-center gap-2">
             <Trophy size={18} /> Skor & Progres
           </h3>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-500">Posisi</span>
-              <span className="text-sm font-bold text-indigo-600">Petak {position}</span>
-            </div>
-            <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-              <motion.div 
-                className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"
-                animate={{ width: `${position}%` }}
-                transition={{ duration: 0.5 }}
-              />
-            </div>
-            <div className="grid grid-cols-3 gap-3 pt-2">
-              <div className="bg-indigo-50 p-2 rounded-xl text-center">
-                <span className="block text-[10px] text-indigo-400 font-bold mb-1 uppercase">Skor</span>
-                <span className="block text-lg font-black text-indigo-700">{score}</span>
-              </div>
-              <div className="bg-emerald-50 p-2 rounded-xl text-center">
-                <span className="block text-[10px] text-emerald-500 font-bold mb-1 uppercase">Waktu</span>
-                <span className="block text-lg font-black text-emerald-700">{formatTime(elapsedTime)}</span>
-              </div>
-              <div className="bg-amber-50 p-2 rounded-xl text-center">
-                <span className="block text-[10px] text-amber-500 font-bold mb-1 uppercase">Kuis</span>
-                <span className="block text-lg font-black text-amber-700">{correctAnswers}<span className="text-xs text-amber-400">/{questionsAnswered}</span></span>
-              </div>
-            </div>
+          
+          <div className="space-y-4">
+            {players.map((p, idx) => {
+              const isActive = idx === currentPlayerIdx && !gameWon;
+              return (
+                <div 
+                  key={p.id} 
+                  className={`p-3.5 rounded-2xl border transition-all ${
+                    isActive 
+                      ? "border-indigo-400 bg-indigo-50/40 shadow-sm" 
+                      : "border-gray-50 bg-white"
+                  }`}
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full inline-block" style={{ backgroundColor: PAWN_COLORS[p.id].mid }} />
+                      <span className="text-sm font-extrabold text-gray-700 truncate max-w-[120px]">{p.name}</span>
+                    </div>
+                    <span className="text-xs font-bold text-indigo-600">
+                      {p.isFinished ? `Finish (#${p.finishedRank})` : `Petak ${p.position}`}
+                    </span>
+                  </div>
+                  
+                  <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden mb-2.5">
+                    <motion.div 
+                      className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"
+                      animate={{ width: `${p.position}%` }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-center text-[10px]">
+                    <div className="bg-white/80 border border-gray-100 p-1.5 rounded-xl">
+                      <span className="block text-gray-400 font-bold uppercase">Skor</span>
+                      <span className="block text-xs font-black text-indigo-600">{p.score}</span>
+                    </div>
+                    <div className="bg-white/80 border border-gray-100 p-1.5 rounded-xl">
+                      <span className="block text-gray-400 font-bold uppercase">Kuis</span>
+                      <span className="block text-xs font-black text-emerald-600">{p.correctAnswers}/{p.questionsAnswered}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="bg-indigo-50/50 p-3 rounded-2xl text-center border border-indigo-50">
+            <span className="block text-[10px] text-indigo-400 font-bold mb-0.5 uppercase">Waktu Bermain</span>
+            <span className="block text-lg font-black text-indigo-700">{formatTime(elapsedTime)}</span>
           </div>
         </div>
       </div>
@@ -609,6 +883,9 @@ export default function SnakesLadders() {
             >
               <div className={`inline-flex px-3 py-1 rounded-full text-xs font-bold mb-4 ${quizModal.type === 'ladder' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
                 {quizModal.type === 'ladder' ? '🪜 Tantangan Tangga — Jawab benar untuk naik!' : '🐍 Bahaya Ular — Jawab benar agar selamat!'}
+              </div>
+              <div className="text-xs font-bold text-slate-400 mb-1">
+                Kuis untuk: <span className="font-extrabold text-indigo-600">{activePlayer.name}</span>
               </div>
               <h2 className="text-xl font-black text-gray-800 mb-5 leading-snug">
                 {quizModal.question.question}
